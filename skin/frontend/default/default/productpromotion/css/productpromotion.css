@@ -1,0 +1,42 @@
+/* Shopping Cart Collateral boxes -Product Promotion
+*******************************************************************/
+.promotion-products ul.bxslider { margin: 0; padding: 0; }
+.promotion-products .products-grid li.item{ padding: 0;}
+.promotion-products .products-grid li.item .product-detail{ border: 1px solid #d4d4d4; text-align: center; padding: 12px; min-height: 250px; position: relative;}
+.promotion-products .products-grid .product-name{ cursor: pointer;}
+.promotion-products .products-grid .product-image{ margin: 0 auto 5px auto;}
+.promotion-products .products-grid .actions{  bottom: 12px;  left: 0;  position: absolute;   right: 0;}
+.promotion-products .products-grid .actions button.disabled{ cursor: default;}
+.promotion-products .products-grid .price-box { color: #dc6809; font-size: 13px;  font-weight: bold;  margin: 5px 0;}
+.missing-total{    color:#888888;  font-weight: normal; margin-bottom: 12px; margin-right:12px; width: auto; font-size:18px;}
+.promotion-products .products-grid{ background: none; width: 100%; border: none;}
+.promotion-products .standard-promotion{  position:absolute; left:-31px; *top:0;} 
+.promotion-products .standard-promotion p{ margin:0;}
+.promotion-products .premium-promotion{  position:absolute;left:-31px; *top:0; }
+.promotion-products .premium-promotion p{ margin:0;}
+.cart-collaterals .loading-mask{ text-align: center;}
+.totals{ background: none;}
+
+.opc #promotions{ margin: 2em 0 0 0;}
+.customer-order-request.field{ border-width: 1px 1px 1px;}
+.opc .page-title{ padding: 0 4%; width: 92%;}
+.opc .promotion-products .products-grid { }
+
+.product-essential{ padding: 15px; }
+.product-view .product-shop .availability{ margin: 0;}
+.product-view .product-shop .price-box{ padding: 5px 0 0 0; margin: 0;} 
+
+.product-view .product-shop{ float: none;}
+.product-options{ margin: 10px 0 0;}
+.product-view.product-promotion .price{ white-space: inherit !important;}
+
+.product-view.product-promotion .product-shop{ float: left;  width: 100%;}
+.product-view.product-promotion .product-shop .add-to-cart #ajax_loader{ display: inline-block;}
+
+/* LOADING INDICATOR
+*******************************************************************/
+.loading-bg{ position: fixed; background: url("../images/overlay.png") repeat; width: 100%; height: 100%; left: 0; top: 0; z-index: 99;}
+.loading-process {  position:absolute; top:0; left:0; right:0; bottom:0;  margin:auto; height: 40px; width: 150px;  border:2px solid #f1af73;  padding:24px 60px 0 60px; background: url("../images/ajax-loader-tr.gif") no-repeat 50px center #fff4e9;    color:#d85909;  font-size:1.1em;  font-weight:bold;  text-align:center;  z-index:501;  }
+.loading-process img { vertical-align: middle; padding-right: 10px;}
+.product-options-bottom .add-to-cart #ajax_loader{ float: left;}
+

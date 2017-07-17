@@ -1,0 +1,183 @@
+<?php
+$page = Mage::getStoreConfig('biztech_productpromotion/promotionsettings/frontendsettings', Mage::app()->getStore());
+$showPromotion = Mage::getStoreConfig('biztech_productpromotion/promotionsettings/showpromotion', Mage::app()->getStore());
+$limit = Mage::getStoreConfig('biztech_productpromotion/promotionsettings/setlimit', Mage::app()->getStore());
+$limit = $limit ? round($limit) : 2;
+
+
+$quote = Mage::getModel('checkout/cart')->getQuote();
+
+$promotionGift = $quote->getPromotionGift() ? $quote->getPromotionGift() : NULL;
+$promotionAvailed = $quote->getPromotionAvailed() ? $quote->getPromotionAvailed() : 0;
+
+if (($promotionAvailed != true) || ($promotionAvailed == true) && $showPromotion == 1) {
+    if (Mage::helper('productpromotion')->isEnable() && $page == 'proceedtocheckout') {
+        ?>
+
+        <div id="loadingmask" class="loading-bg" style="display: none;">
+            <div class="loading-process">
+                <?php echo $this->__('Please wait...') ?>
+            </div>
+        </div>
+        <?php
+        $storeid = Mage::app()->getStore()->getStoreId();
+
+
+        foreach ($quote->getAllItems() as $cartItem) {
+            if ($cartItem->getProduct()->getId() == $promotionGift) {
+                $item = $cartItem;
+                if ($cartItem->getQty() > 1)
+                    $cartTotal += (Mage::helper('tax')->getPrice($cartItem->getProduct(), $cartItem->getProduct()->getFinalPrice()) *
+                        ($cartItem->getQty() - 1));
+            } else {
+                $cartTotal += (Mage::helper('tax')->getPrice($cartItem->getProduct(), $cartItem->getProduct()->getFinalPrice()) * $cartItem->getQty());
+            }
+        }
+
+        $quoteSubTotal = $quote->getGrandTotal();
+        $count = 0;
+        $product_array = Array();
+
+
+        //collection for promotion price lessthan subtotalwithdiscount
+        $promotionCollection_lt = Mage::getModel('productpromotion/productpromotiondata')->getCollection()
+            ->addFieldToFilter('promotion_price', array('lt' => $quoteSubTotal))
+            ->addFieldToFilter('status', array('eq' => '1'))
+            ->addFieldToFilter('store_id', array('eq' => $storeid))
+            ->setOrder('promotion_price', 'ASC');
+        $promotionCollection_lt->getSelect()->limit($limit);
+
+        if (count($promotionCollection_lt) > 0) {
+            foreach ($promotionCollection_lt->getData() as $key_lt => $promotion_lt) {
+                $productIds['product_id'] = explode(",", $promotion_lt['product_id']);
+                $count += count($productIds['product_id']);
+                $productIds['promotion_price'] = $promotion_lt['promotion_price'];
+                $productIds['promotion_id'] = $promotion_lt['productpromotion_id'];
+                $product_array[] = $productIds;
+            }
+        }
+
+        //collection for promotion price greaterthan subtotalwithdiscount
+        $promotionCollection = Mage::getModel('productpromotion/productpromotiondata')->getCollection()
+            ->addFieldToFilter('promotion_price', array('gteq' => $quoteSubTotal))
+            ->addFieldToFilter('status', array('eq' => '1'))
+            ->addFieldToFilter('store_id', array('eq' => $storeid))
+            ->setOrder('promotion_price', 'ASC');
+        $promotionCollection->getSelect()->limit($limit);
+
+
+        if (count($promotionCollection) > 0) {
+            foreach ($promotionCollection->getData() as $key => $promotion) {
+                $productIds['product_id'] = explode(",", $promotion['product_id']);
+                $count += count($productIds['product_id']);
+                $productIds['promotion_price'] = $promotion['promotion_price'];
+                $productIds['promotion_id'] = $promotion['productpromotion_id'];
+                $product_array[] = $productIds;
+            }
+        }
+        ?>
+        <?php
+        $availedProdcut = array();
+        $i = 1;
+        if ($count > 0):
+            ?>
+            <div id="promotions">
+                <div id="promotion-title" class="page-title title-buttons">
+                    <h1>
+                        <?php
+                        if (($promotionAvailed != true)):
+                            $msg = Mage::getStoreConfig('biztech_productpromotion/promotionsettings/message', Mage::app()->getStore());
+                            $helper = Mage::helper('cms');
+                            if ($helper) {
+                                $processor = $helper->getBlockTemplateProcessor();
+                                if ($processor) {
+                                    echo $content = $processor->filter($msg);
+                                }
+                            }
+                        endif;
+                        ?>
+                    </h1>
+                </div>
+                <div class="category-products">
+                    <ul class="products-grid">
+                        <?php
+                        foreach ($product_array as $product_data) {
+                            $cartPriceDifference = $this->getCartdifference($product_data['promotion_price']);
+                            foreach ($product_data['product_id'] as $id_value) {
+                                $_item = Mage::getModel('catalog/product')->load($id_value);
+                                $productID = $_item->getId();
+                                ?>
+
+                                <?php
+                                if (!(in_array($productID, $availedProdcut))):
+                                    if ($_item->getIsInStock() == 1 &&
+                                        $_item->getStatus() == Mage_Catalog_Model_Product_Status::STATUS_ENABLED
+                                    ) :
+                                        ?>
+                                        <li class="item<?php
+                                        if ($i == 1) {
+                                            echo ' first';
+                                        }
+                                        if ($i == $count) {
+                                            echo ' last';
+                                        }
+                                        ?>">
+                                            <div class="product-detail">
+                                                <a class="product-image">
+                                                    <img src="<?php echo Mage::helper('catalog/image')->init($_item, 'small_image')->resize(170); ?>"
+                                                         width="135"
+                                                         height="135" alt="<?php echo $_item->getName() ?>"/>
+                                                </a>
+                                                <h3 class="product-name">
+                                                    <a><?php echo $_item->getName() ?></a>
+                                                </h3>
+
+                                                <?php if (($cartPriceDifference > 0) && ($promotionAvailed != true)): ?>
+                                                    <div class="price-box">
+                                                        <span class="regular-price">
+                                                            <span class="price"> <?php echo 'You Miss ' . Mage::helper('core')->currency($cartPriceDifference); ?></span></span>
+                                                    </div>
+                                                <?php endif; ?>
+                                                <div class="actions">
+                                                    <?php if (!($_item->getTypeInstance(true)->hasRequiredOptions($_item) || $_item->isGrouped())) { ?>
+                                                        <button name="choose-gift" type="button"
+                                                                class="button gift_btn<?php if (($cartPriceDifference > 0) || ($promotionAvailed == true)) { ?> disabled <?php } ?> "
+                                                            <?php if (($cartPriceDifference > 0) || ($promotionAvailed == true)) { ?> disabled="disabled" <?php } ?>
+                                                                title="<?php echo $this->__('Choose this gift') ?>"
+                                                                id="<?php echo $id_value; ?>"
+                                                                onclick="selectGiftCheckout('<?php echo $id_value ?>', '<?php echo $this->getUrl('checkout/onepage', array('_secure' => true)); ?>' ,'<?php echo $product_data['promotion_id'] ?>', '<?php echo $this->getUrl('productpromotion/index/setGift/') ?>')"><?php echo $this->__('Choose this gift') ?>
+                                                        </button>
+                                                    <?php } else { ?>
+                                                        <button name="choose-gift" type="button"
+                                                                class="button gift_btn<?php if (($cartPriceDifference > 0) || ($promotionAvailed == true)) { ?> disabled <?php } ?> "
+                                                            <?php if (($cartPriceDifference > 0) || ($promotionAvailed == true)) { ?> disabled="disabled" <?php } ?>
+                                                                title="<?php echo $this->__('Choose this gift') ?>"
+                                                                id="<?php echo $id_value; ?>"
+                                                                onclick="showOptions('<?php echo $_item->getId() . '_' . $product_data['promotion_id']; ?>')"><?php echo $this->__('Choose this gift') ?>
+                                                        </button>
+                                                        <a href="<?php echo $this->getUrl('productpromotion/index/options', array('product_id' => $_item->getId(), 'promotionId' => $product_data['promotion_id'], 'page' => 'checkout')); ?>"
+                                                           class='fancybox'
+                                                           id="fancybox_<?php echo $_item->getId() . '_' . $product_data['promotion_id']; ?>"
+                                                           style='display:none'>
+                                                        </a>
+                                                    <?php } ?>
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                        <?php
+                                    endif;
+                                endif;
+                                $availedProdcut[] = $productID;
+                                $i++;
+                                ?>
+                                <?php
+                            }
+                        }
+                        ?></ul>
+                </div>
+            </div>
+        <?php endif; ?>
+    <?php } ?>
+
+<?php } ?>

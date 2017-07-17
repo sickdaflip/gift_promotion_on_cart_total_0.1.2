@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<config>
+    <modules>
+        <Biztech_Productpromotion>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Biztech_Productpromotion>
+    </modules>
+</config>

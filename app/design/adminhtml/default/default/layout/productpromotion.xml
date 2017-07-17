@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+  
+    
+    <adminhtml_system_config_edit>
+        <update handle="editor"/>
+        <reference name="head">
+            <action method="setCanLoadTinyMce">
+                <load>1</load>
+            </action>
+        </reference>
+    </adminhtml_system_config_edit>
+    
+    <adminhtml_productpromotion_index>
+        <reference name="content">
+            <block  type="adminhtml/store_switcher" name="store_switcher" as="store_switcher">
+                <action method="setUseConfirm">
+                    <params>0</params>
+                </action>
+            </block>
+            <block type="productpromotion/adminhtml_productpromotion" name="productpromotion" />
+        </reference>
+    </adminhtml_productpromotion_index>
+    
+    <adminhtml_productpromotion_edit>
+        <reference name="left">
+            <block  type="adminhtml/store_switcher" name="store_switcher" as="store_switcher" before="-">
+                <action method="setUseConfirm">
+                    <params>0</params>
+                </action>
+            </block>            
+        </reference>
+    </adminhtml_productpromotion_edit>
+
+    <adminhtml_productpromotion_product>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="productpromotion/adminhtml_productpromotion_edit_tab_related" name="related.grid"/>
+            <block type="adminhtml/widget_grid_serializer" name="grid_serializer">
+                <reference name="grid_serializer">
+                    <action method="initSerializerBlock">
+                        <grid_block_name>related.grid</grid_block_name>
+                        <data_callback>getRelProducts</data_callback>
+                        <hidden_input_name>links[related_product]</hidden_input_name>
+                        <reload_param_name>related_product</reload_param_name>
+                    </action>
+                </reference>
+            </block>
+        </block>
+    </adminhtml_productpromotion_product>
+
+    <adminhtml_productpromotion_grid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="productpromotion/adminhtml_productpromotion_edit_tab_related" name="related.grid"/>
+        </block>
+    </adminhtml_productpromotion_grid>
+</layout>

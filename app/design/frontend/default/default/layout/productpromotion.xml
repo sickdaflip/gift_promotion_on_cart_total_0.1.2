@@ -1,0 +1,198 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+   
+    <productpromotion_index_index>
+        <reference name="content">
+            <block type="productpromotion/productpromotion" name="productpromotion" template="productpromotion/productpromotion.phtml" />
+        </reference>
+    </productpromotion_index_index>
+    
+    <productpromotion_index_options>
+         <reference name="root">
+            <action method="setTemplate"><template>page/empty.phtml</template></action>
+        </reference>
+        
+         <reference name="head">
+             <!--<action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+               <type>skin_js</type>
+               <name>productpromotion/js/jquery-1.6.4.min.js</name>
+           </action>-->
+             <!--<action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_js</type>
+                <name>productpromotion/js/jquery.noconflict.js</name>
+            </action>-->
+             <action method="addJs">
+                 <script>varien/product.js</script>
+             </action>
+            <action method="addJs">
+                <script>varien/configurable.js</script>
+            </action>
+            
+<action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_css</type>
+                <name>productpromotion/css/productpromotion.css</name>
+                <params/>
+            </action>
+            <action method="addItem"><type>js_css</type><name>calendar/calendar-win2k-1.css</name><params/><!--<if/><condition>can_load_calendar_js</condition>--></action>
+            <action method="addItem"><type>js</type><name>calendar/calendar.js</name><!--<params/><if/><condition>can_load_calendar_js</condition>--></action>
+            <action method="addItem"><type>js</type><name>calendar/calendar-setup.js</name><!--<params/><if/><condition>can_load_calendar_js</condition>--></action>
+        </reference>
+        <reference name="content">
+           <block type="catalog/product_view" name="product.info" template="productpromotion/catalog/product/options.phtml">
+           
+                <block type="catalog/product_view" name="product.info.addtocart" as="addtocart" template="productpromotion/catalog/product/view/addtocart.phtml"/>
+
+                <block type="catalog/product_view" name="product.info.options.wrapper" as="product_options_wrapper" template="catalog/product/view/options/wrapper.phtml" translate="label">
+                    <label>Info Column Options Wrapper</label>
+                    <block type="core/template" name="options_js" template="catalog/product/view/options/js.phtml"/>
+                    <block type="catalog/product_view_options" name="product.info.options" as="product_options" template="catalog/product/view/options.phtml">
+                        <action method="addOptionRenderer"><type>text</type><block>catalog/product_view_options_type_text</block><template>catalog/product/view/options/type/text.phtml</template></action>
+                        <action method="addOptionRenderer"><type>file</type><block>catalog/product_view_options_type_file</block><template>catalog/product/view/options/type/file.phtml</template></action>
+                        <action method="addOptionRenderer"><type>select</type><block>catalog/product_view_options_type_select</block><template>catalog/product/view/options/type/select.phtml</template></action>
+                        <action method="addOptionRenderer"><type>date</type><block>catalog/product_view_options_type_date</block><template>catalog/product/view/options/type/date.phtml</template></action>
+                    </block>
+                    <block type="core/html_calendar" name="html_calendar" as="html_calendar" template="page/js/calendar.phtml"/>
+                </block>
+                <block type="catalog/product_view" name="product.info.options.wrapper.bottom" as="product_options_wrapper_bottom" template="catalog/product/view/options/wrapper/bottom.phtml" translate="label">
+                    <label>Bottom Block Options Wrapper</label>
+                    <action method="insert"><block>product.tierprices</block></action>
+                    <block type="catalog/product_view" name="product.clone_prices" as="prices" template="catalog/product/view/price_clone.phtml"/>
+                    <action method="append"><block>product.info.addtocart</block></action>
+                    <action method="append"><block>product.info.addto</block></action>
+                </block>
+
+                <block type="core/template_facade" name="product.info.container1" as="container1">
+                    <action method="setDataByKey"><key>alias_in_layout</key><value>container1</value></action>
+                    <action method="setDataByKeyFromRegistry"><key>options_container</key><key_in_registry>product</key_in_registry></action>
+                    <action method="append"><block>product.info.options.wrapper</block></action>
+                    <action method="append"><block>product.info.options.wrapper.bottom</block></action>
+                </block>
+                <block type="core/template_facade" name="product.info.container2" as="container2">
+                    <action method="setDataByKey"><key>alias_in_layout</key><value>container2</value></action>
+                    <action method="setDataByKeyFromRegistry"><key>options_container</key><key_in_registry>product</key_in_registry></action>
+                    <action method="append"><block>product.info.options.wrapper</block></action>
+                    <action method="append"><block>product.info.options.wrapper.bottom</block></action>
+                </block>
+                <action method="unsetCallChild"><child>container1</child><call>ifEquals</call><if>0</if><key>alias_in_layout</key><key>options_container</key></action>
+                <action method="unsetCallChild"><child>container2</child><call>ifEquals</call><if>0</if><key>alias_in_layout</key><key>options_container</key></action>
+            </block>
+        </reference>
+     
+    </productpromotion_index_options>
+    
+    
+    <biztech_productpromotion_checkout_cart_index>
+        <update handle="checkout_cart_index"/>
+    </biztech_productpromotion_checkout_cart_index>
+
+    <checkout_cart_index>
+         <reference name="head">
+          <!--<action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+               <type>skin_js</type>
+               <name>productpromotion/js/jquery-1.6.4.min.js</name>
+           </action>
+           <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_js</type>
+                <name>productpromotion/js/fancybox/jquery.fancybox-1.3.4.js</name>
+            </action>
+            <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_js</type>
+                <name>productpromotion/js/fancybox/jquery.easing-1.3.pack.js</name>
+            </action>
+            <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_js</type>
+                <name>productpromotion/js/fancybox/jquery.mousewheel-3.0.4.pack.js</name>
+            </action>
+              <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_js</type>
+                <name>productpromotion/js/jquery.noconflict.js</name>
+            </action>
+            <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_css</type>
+                <name>productpromotion/css/fancybox/jquery.fancybox-1.3.4.css</name>
+            </action>
+            <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_js</type>
+                <name>productpromotion/js/jquery.bxslider.min.js</name>
+                <params/>
+            </action>
+             <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_css</type>
+                <name>productpromotion/css/productpromotion.css</name>
+                <params/>
+            </action>
+            <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_css</type>
+                <name>productpromotion/css/jquery.bxslider.css</name>
+                <params/>
+            </action>-->
+             <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                 <type>skin_js</type>
+                 <name>productpromotion/js/productpromotion.js</name>
+                 <params/>
+             </action>
+        </reference>
+       
+        <reference name="content">
+            <block type="productpromotion/productpromotion" after="checkout.cart.crosssell" name="checkout.cart.promotion" as="promotion" template="productpromotion/productpromotion.phtml"/>
+        </reference>
+    </checkout_cart_index>
+
+    <checkout_onepage_index>
+          <reference name="head">
+          <!--<action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+               <type>skin_js</type>
+               <name>productpromotion/js/jquery-1.6.4.min.js</name>
+           </action>
+            <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_js</type>
+                <name>productpromotion/js/fancybox/jquery.fancybox-1.3.4.js</name>
+            </action>
+            <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_js</type>
+                <name>productpromotion/js/fancybox/jquery.easing-1.3.pack.js</name>
+            </action>
+            <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_js</type>
+                <name>productpromotion/js/fancybox/jquery.mousewheel-3.0.4.pack.js</name>
+            </action>
+              <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_js</type>
+                <name>productpromotion/js/jquery.noconflict.js</name>
+            </action>
+            <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_css</type>
+                <name>productpromotion/css/fancybox/jquery.fancybox-1.3.4.css</name>
+            </action>
+            <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_js</type>
+                <name>productpromotion/js/jquery.bxslider.min.js</name>
+                <params/>
+            </action>
+             <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_css</type>
+                <name>productpromotion/css/productpromotion.css</name>
+                <params/>
+            </action>
+            <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_css</type>
+                <name>productpromotion/css/jquery.bxslider.css</name>
+                <params/>
+            </action>-->
+              <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                  <type>skin_js</type>
+                  <name>productpromotion/js/productpromotion.js</name>
+                  <params/>
+              </action>
+        </reference>
+    </checkout_onepage_index>
+    
+    <checkout_onepage_review>
+        <reference name="root">
+            <action method="setTemplate" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <template>productpromotion/checkout/onepage/review/info.phtml</template>
+            </action>
+            <block type="productpromotion/productpromotion"  output="toHtml" name="promotion_detail" template="productpromotion/productpromotion_checkout.phtml"></block>
+        </reference>
+    </checkout_onepage_review>
+</layout>

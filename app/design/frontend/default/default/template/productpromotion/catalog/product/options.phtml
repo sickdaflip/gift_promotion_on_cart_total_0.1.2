@@ -1,0 +1,114 @@
+<?php $_helper = $this->helper('catalog/output'); ?>
+<?php $_product = $this->getProduct(); ?>
+
+<script type="text/javascript">
+    var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);
+</script>
+<div class="product-view product-promotion">
+    <div class="product-essential">
+        <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form" <?php if ($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+            <div class="no-display">
+                <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
+                <input type="hidden" name="qty" value="1"/>
+                <input type="hidden" name="promotionId" value="<?php echo $this->getRequest()->getParam('promotionId'); ?>"/>
+                <input type="hidden" name="page" value="<?php echo $this->getRequest()->getParam('page'); ?>"/>
+                <input type="hidden" name="related_product" id="related-products-field" value="" />
+            </div>
+
+
+            <div class="product-shop">
+                <div class="product-name">
+                    <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
+                </div>
+
+                <?php echo $this->getChildHtml('product_type_data') ?>
+
+                <?php if (!$this->hasOptions()): ?>
+                    <div class="add-to-box">
+                        <?php if ($_product->isSaleable()): ?>
+                            <?php echo $this->getChildHtml('addtocart') ?>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($_product->isSaleable() && $this->hasOptions()): ?>
+                    <?php echo $this->getChildChildHtml('container1', '', true, true) ?>
+                <?php endif; ?>
+
+            </div>
+            <div class="clearer"></div>
+            <?php if ($_product->isSaleable() && $this->hasOptions()): ?>
+                <?php echo $this->getChildChildHtml('container2', '', true, true) ?>
+            <?php endif; ?>
+        </form>
+        <script type="text/javascript">
+            //<![CDATA[
+
+            var productAddToCartForm = new VarienForm('product_addtocart_form');
+            productAddToCartForm.submit = function(button, url) {
+              
+             if (this.validator.validate()) {
+                    var page = '<?php echo $this->getRequest()->getParam('page'); ?>';
+                    var form = this.form;
+                    var oldUrl = form.action;
+                    if (url) {
+                        form.action = url;
+                    }
+                    var e = null;
+                    // Start of our new ajax code
+                    if (!url) {
+                        url = $('product_addtocart_form').getAttribute('action');
+                    }
+                    url = url.replace("checkout/cart", "productpromotion/index"); // New Code
+                    var data = $('product_addtocart_form').serialize(true);
+                    $('ajax_loader').show();
+                    try {
+                      
+                       new Ajax.Request(url, {
+                            dataType: 'json',
+                            method: 'post',
+                            async: false,
+                            parameters: data,
+                            onComplete: function(data) {
+                                $('ajax_loader').hide();
+                                
+                                if (page == 'cart')
+                                {
+					window.top.location.href = '<?php echo Mage::getUrl('checkout/cart'); ?>';
+                                }
+                                if (page == 'checkout')
+                                {
+                                    parent.setOnepageData();
+                                    window.top.location.href = '<?php echo Mage::getUrl('checkout/onepage'); ?>';
+                                    
+                                }
+                            }
+                        });
+                    } catch (e) {
+                    }
+                    // End of our new ajax code
+                    this.form.action = oldUrl;
+                    if (e) {
+                        throw e;
+                    }
+                }
+            }.bind(productAddToCartForm);
+            productAddToCartForm.submitLight = function(button, url) {
+                if (this.validator) {
+                    var nv = Validation.methods;
+                    delete Validation.methods['required-entry'];
+                    delete Validation.methods['validate-one-required'];
+                    delete Validation.methods['validate-one-required-by-name'];
+                    if (this.validator.validate()) {
+                        if (url) {
+                            this.form.action = url;
+                        }
+                        this.form.submit();
+                    }
+                    Object.extend(Validation.methods, nv);
+                }
+            }.bind(productAddToCartForm);
+            //]]>
+        </script>
+    </div>
+</div>

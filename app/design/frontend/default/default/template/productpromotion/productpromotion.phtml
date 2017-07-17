@@ -190,25 +190,3 @@ if (($promotionAvailed != true) || ($promotionAvailed == true) && $showPromotion
     }
 }
 ?>
-
-<script type="text/javascript">
-    jQuery(document).ready(function() {
-        jQuery('.fancybox').fancybox(
-                {
-                    hideOnContentClick: true,
-                    width: 400,
-                    autoDimensions: true,
-                    type: 'iframe',
-                    showTitle: false,
-                    scrolling: 'no',
-                    onComplete: function() {
-                        jQuery('#fancybox-frame').load(function() { // wait for frame to load and then gets it's height
-                            jQuery('#fancybox-content').height(jQuery(this).contents().find('body').height() + 70);
-                            jQuery.fancybox.resize();
-                        });
-
-                    }
-                }
-        );
-    });
-</script>

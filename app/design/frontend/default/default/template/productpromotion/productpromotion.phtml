@@ -31,7 +31,7 @@ if (($promotionAvailed != true) || ($promotionAvailed == true) && $showPromotion
 
                 if ($cartItem->getQty() > 1)
                     $cartTotal += (Mage::helper('tax')->getPrice($cartItem->getProduct(), $cartItem->getProduct()->getFinalPrice()) *
-                            ($cartItem->getQty() - 1));
+                        ($cartItem->getQty() - 1));
             } else {
                 $cartTotal += (Mage::helper('tax')->getPrice($cartItem->getProduct(), $cartItem->getProduct()->getFinalPrice()) * $cartItem->getQty());
             }
@@ -45,10 +45,10 @@ if (($promotionAvailed != true) || ($promotionAvailed == true) && $showPromotion
 
         //collection for promotion price lessthan carttotal
         $promotionCollection_lt = Mage::getModel('productpromotion/productpromotiondata')->getCollection()
-                ->addFieldToFilter('promotion_price', array('lt' => $quoteSubTotal))
-                ->addFieldToFilter('status', array('eq' => '1'))
-                ->addFieldToFilter('store_id', array('eq' => $storeid))
-                ->setOrder('promotion_price', 'ASC');
+            ->addFieldToFilter('promotion_price', array('lt' => $quoteSubTotal))
+            ->addFieldToFilter('status', array('eq' => '1'))
+            ->addFieldToFilter('store_id', array('eq' => $storeid))
+            ->setOrder('promotion_price', 'ASC');
         $promotionCollection_lt->getSelect()->limit($limit);
 
         if (count($promotionCollection_lt) > 0) {
@@ -63,10 +63,10 @@ if (($promotionAvailed != true) || ($promotionAvailed == true) && $showPromotion
 
         //collection for promotion price greaterthan carttotal
         $promotionCollection = Mage::getModel('productpromotion/productpromotiondata')->getCollection()
-                ->addFieldToFilter('promotion_price', array('gteq' => $quoteSubTotal))
-                ->addFieldToFilter('status', array('eq' => '1'))
-                ->addFieldToFilter('store_id', array('eq' => $storeid))
-                ->setOrder('promotion_price', 'ASC');
+            ->addFieldToFilter('promotion_price', array('gteq' => $quoteSubTotal))
+            ->addFieldToFilter('status', array('eq' => '1'))
+            ->addFieldToFilter('store_id', array('eq' => $storeid))
+            ->setOrder('promotion_price', 'ASC');
         $promotionCollection->getSelect()->limit($limit);
 
 
@@ -115,11 +115,9 @@ if (($promotionAvailed != true) || ($promotionAvailed == true) && $showPromotion
                                 ?>
                                 <?php
                                 if (!(in_array($productID, $availedProdcut))):
-
-                                    if ($_item->getIsInStock() == 1 &&
-                                            $_item->getStatus() == Mage_Catalog_Model_Product_Status::STATUS_ENABLED):
+                                    if ($_item->getIsInStock() == 1 && $_item->getStatus() == Mage_Catalog_Model_Product_Status::STATUS_ENABLED):
                                         ?>
-                                        <li class="gift">
+                                        <li class="item">
                                             <?php if ($_item->getAttributeText('manufacturer')): ?>
                                                 <?php $brand = $_item->getAttributeText('manufacturer') ?>
                                                 <div class="product-brand">
@@ -128,48 +126,51 @@ if (($promotionAvailed != true) || ($promotionAvailed == true) && $showPromotion
                                                 </div>
                                             <?php endif; ?>
                                             <h3 class="product-name">
-                                                <?php echo $_item->getName() ?>
+                                                <a href="<?php echo $_item->getProductUrl() ?>"><?php echo $_item->getName() ?></a>
                                             </h3>
                                             <div class="products-image float-center">
                                                 <a href="<?php echo $_item->getProductUrl() ?>"
-                                                                                           title="<?php echo $this->stripTags($this->getImageLabel($_item, 'small_image'), null, true) ?>"
-                                                                                           class="product-image small-centered">
+                                                   title="<?php echo $this->stripTags($this->getImageLabel($_item, 'small_image'), null, true) ?>"
+                                                   class="product-image small-centered">
                                                     <img src="<?php echo $this->helper('catalog/image')->init($_item, 'small_image')->resize(170); ?>"
-                                                            width="170" height="170"
-                                                            alt="<?php echo $this->stripTags($this->getImageLabel($_item, 'small_image'), null, true) ?>"/>
+                                                         width="170" height="170"
+                                                         alt="<?php echo $this->stripTags($this->getImageLabel($_item, 'small_image'), null, true) ?>"/>
                                                 </a>
                                             </div>
-                                                <?php if (($cartPriceDifference > 0) && ($promotionAvailed != true)): ?>
-                                                    <div class="price-box">
+                                            <?php if (($cartPriceDifference > 0) && ($promotionAvailed != true)): ?>
+                                                <div class="price-box">
                                                         <span class="regular-price">
                                                             <span class="price"><?php echo $this->__('You Miss ') . Mage::helper('core')->currency($cartPriceDifference); ?></span></span>
 
-                                                    </div>
-                                                <?php endif; ?>
-                                                <div class="actions">
-                                                    <?php if (!($_item->getTypeInstance(true)->hasRequiredOptions($_item) || $_item->isGrouped())) { ?>
-                                                        <button name="choose-gift" type="button"
-                                                                class="button gift_btn<?php if (($cartPriceDifference > 0) || ($promotionAvailed == true)) { ?> disabled <?php } ?> "
-                                                                <?php if (($cartPriceDifference > 0) || ($promotionAvailed == true)) { ?> disabled="disabled" <?php } ?>
-                                                                title="<?php echo $this->__('Choose this gift') ?>" id="<?php echo $id_value; ?>"
-                                                                onclick="selectGift('<?php echo $id_value ?>', '<?php echo Mage::helper('checkout/cart')->getAddUrl($_item) ?>', '<?php echo $product_data['promotion_id'] ?>', '<?php echo $this->getUrl('productpromotion/index/setGift/') ?>')">
-                                                            <span><span><?php echo $this->__('Choose this gift') ?></span>
-                                                            </span>
-                                                        </button>
-                                                    <?php } else { ?>
-                                                        <button name="choose-gift" type="button"
-                                                                class="button gift_btn<?php if (($cartPriceDifference > 0) || ($promotionAvailed == true)) { ?> disabled <?php } ?> "
-                                                                <?php if (($cartPriceDifference > 0) || ($promotionAvailed == true)) { ?> disabled="disabled" <?php } ?>
-                                                                title="<?php echo $this->__('Choose this gift') ?>" id="<?php echo $id_value; ?>"
-                                                                onclick="showOptions('<?php echo $_item->getId() . '_' . $product_data['promotion_id']; ?>')">
-                                                            <span><span><?php echo $this->__('Choose this gift') ?></span>
-                                                            </span>
-                                                        </button>
-
-                                                        <a href="<?php echo $this->getUrl('productpromotion/index/options', array('product_id' => $_item->getId(), 'promotionId' => $product_data['promotion_id'], 'page' => 'cart')); ?>" class='fancybox' id="fancybox_<?php echo $_item->getId() . '_' . $product_data['promotion_id']; ?>" style='display:none'>
-                                                        </a>
-                                                    <?php } ?>
                                                 </div>
+                                            <?php endif; ?>
+                                            <div class="actions">
+                                                <?php if (!($_item->getTypeInstance(true)->hasRequiredOptions($_item) || $_item->isGrouped())) { ?>
+                                                    <button name="choose-gift" type="button"
+                                                            class="button gift_btn<?php if (($cartPriceDifference > 0) || ($promotionAvailed == true)) { ?> disabled <?php } ?> "
+                                                        <?php if (($cartPriceDifference > 0) || ($promotionAvailed == true)) { ?> disabled="disabled" <?php } ?>
+                                                            title="<?php echo $this->__('Choose this gift') ?>"
+                                                            id="<?php echo $id_value; ?>"
+                                                            onclick="selectGift('<?php echo $id_value ?>', '<?php echo Mage::helper('checkout/cart')->getAddUrl($_item) ?>', '<?php echo $product_data['promotion_id'] ?>', '<?php echo $this->getUrl('productpromotion/index/setGift/') ?>')">
+                                                            <?php echo $this->__('Choose this gift') ?>
+                                                    </button>
+                                                <?php } else { ?>
+                                                    <button name="choose-gift" type="button"
+                                                            class="button gift_btn<?php if (($cartPriceDifference > 0) || ($promotionAvailed == true)) { ?> disabled <?php } ?> "
+                                                        <?php if (($cartPriceDifference > 0) || ($promotionAvailed == true)) { ?> disabled="disabled" <?php } ?>
+                                                            title="<?php echo $this->__('Choose this gift') ?>"
+                                                            id="<?php echo $id_value; ?>"
+                                                            onclick="showOptions('<?php echo $_item->getId() . '_' . $product_data['promotion_id']; ?>')">
+                                                            <?php echo $this->__('Choose this gift') ?>
+                                                    </button>
+
+                                                    <a href="<?php echo $this->getUrl('productpromotion/index/options', array('product_id' => $_item->getId(), 'promotionId' => $product_data['promotion_id'], 'page' => 'cart')); ?>"
+                                                       class='fancybox'
+                                                       id="fancybox_<?php echo $_item->getId() . '_' . $product_data['promotion_id']; ?>"
+                                                       style='display:none'>
+                                                    </a>
+                                                <?php } ?>
+                                            </div>
                                         </li>
                                         <?php
                                     endif;

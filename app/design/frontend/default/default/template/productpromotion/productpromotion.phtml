@@ -118,23 +118,18 @@ if (($promotionAvailed != true) || ($promotionAvailed == true) && $showPromotion
                                     if ($_item->getIsInStock() == 1 && $_item->getStatus() == Mage_Catalog_Model_Product_Status::STATUS_ENABLED):
                                         ?>
                                         <li class="item">
-                                            <?php if ($_item->getAttributeText('manufacturer')): ?>
-                                                <?php $brand = $_item->getAttributeText('manufacturer') ?>
-                                                <div class="product-brand">
-                                                    <img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA); ?>catalog/brands/<?php echo clean($brand) ?>.png"
-                                                         alt="<?php echo $brand ?> Logo">
-                                                </div>
-                                            <?php endif; ?>
-                                            <h3 class="product-name">
-                                                <a href="<?php echo $_item->getProductUrl() ?>"><?php echo $_item->getName() ?></a>
+                                            <div class="content">
+                                            <h3 class="product-name"><a href="<?php echo $_item->getProductUrl() ?>"
+                                                                        title="<?php echo $this->stripTags($_item->getName(), null, true) ?>"><?php echo $_item->getName() ?></a>
                                             </h3>
                                             <div class="products-image float-center">
                                                 <a href="<?php echo $_item->getProductUrl() ?>"
                                                    title="<?php echo $this->stripTags($this->getImageLabel($_item, 'small_image'), null, true) ?>"
                                                    class="product-image small-centered">
-                                                    <img src="<?php echo $this->helper('catalog/image')->init($_item, 'small_image')->resize(170); ?>"
-                                                         width="170" height="170"
-                                                         alt="<?php echo $this->stripTags($this->getImageLabel($_item, 'small_image'), null, true) ?>"/>
+                                                    <img
+                                                            src="<?php echo $this->helper('catalog/image')->init($_item, 'small_image')->resize(200); ?>"
+                                                            width="200" height="200"
+                                                            alt="<?php echo $this->stripTags($this->getImageLabel($_item, 'small_image'), null, true) ?>"/>
                                                 </a>
                                             </div>
                                             <?php if (($cartPriceDifference > 0) && ($promotionAvailed != true)): ?>
@@ -170,6 +165,7 @@ if (($promotionAvailed != true) || ($promotionAvailed == true) && $showPromotion
                                                        style='display:none'>
                                                     </a>
                                                 <?php } ?>
+                                            </div>
                                             </div>
                                         </li>
                                         <?php

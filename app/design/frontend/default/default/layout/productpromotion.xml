@@ -200,11 +200,11 @@
                   <name>productpromotion/css/jquery.bxslider.css</name>
                   <params/>
               </action>-->
-            <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+            <!--action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
                 <type>skin_js</type>
                 <name>productpromotion/js/productpromotion.js</name>
                 <params/>
-            </action>
+            </action-->
         </reference>
 
         <reference name="content">

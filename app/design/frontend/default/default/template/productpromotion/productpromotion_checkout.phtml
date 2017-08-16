@@ -114,14 +114,7 @@ if (($promotionAvailed != true) || ($promotionAvailed == true) && $showPromotion
                                         $_item->getStatus() == Mage_Catalog_Model_Product_Status::STATUS_ENABLED
                                     ) :
                                         ?>
-                                        <li class="item<?php
-                                        if ($i == 1) {
-                                            echo ' first';
-                                        }
-                                        if ($i == $count) {
-                                            echo ' last';
-                                        }
-                                        ?>">
+                                        <li class="item<?php if ($i == 1) { echo ' first';} if ($i == $count) { echo ' last'; } ?>">
                                             <div class="product-detail">
                                                 <a class="product-image">
                                                     <img src="<?php echo Mage::helper('catalog/image')->init($_item, 'small_image')->resize(170); ?>"

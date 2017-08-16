@@ -104,11 +104,11 @@ class Biztech_Productpromotion_Model_Observer extends Mage_Core_Model_Abstract {
 
                                if ($address->getDiscountAmount()) {
                                     $address->setDiscountAmount(($address->getDiscountAmount() - $discountAmount));
-                                    $address->setDiscountDescription($address->getDiscountDescription() . ', Promotional Gift');
+                                    $address->setDiscountDescription($address->getDiscountDescription() . ', Warenkorbgeschenk');
                                     $address->setBaseDiscountAmount(($address->getBaseDiscountAmount() - $discountAmount));
                                 } else {
                                     $address->setDiscountAmount(-($discountAmount));
-                                    $address->setDiscountDescription('Promotional Gift');
+                                    $address->setDiscountDescription('Warenkorbgeschenk');
                                     $address->setBaseDiscountAmount(-($discountAmount));
                                 }
 

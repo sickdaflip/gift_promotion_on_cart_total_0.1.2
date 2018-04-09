@@ -6,7 +6,7 @@ function showOptions(id) {
 
 
 function selectGift(productId, productURL, promotionId, reloadUrl) {
-    $('loadingmask').style.display = 'block';
+    $('productpromotion-please-wait').style.display = 'block';
     new Ajax.Request(reloadUrl, {
         method: 'post',
         parameters: {
@@ -15,7 +15,7 @@ function selectGift(productId, productURL, promotionId, reloadUrl) {
             cartPage: 1
         },
         onComplete: function(transport) {
-            $('loadingmask').style.display = 'none';
+            $('productpromotion-please-wait').style.display = 'none';
             if (transport.responseText != null) {
                 setLocation(productURL);
             } else {
@@ -33,7 +33,7 @@ function setOnepageData() {
 
 function selectGiftCheckout(productId, productURL, promotionId, reloadUrl, progressUrl)
 {
-    $('loadingmask').style.display = 'block';
+    $('productpromotion-please-wait').style.display = 'block';
     new Ajax.Request(reloadUrl, {
         method: 'post',
         async: false,
@@ -44,7 +44,7 @@ function selectGiftCheckout(productId, productURL, promotionId, reloadUrl, progr
             redirectUrl: productURL
         },
         onComplete: function(transport) {
-            $('loadingmask').style.display = 'none';
+            $('productpromotion-please-wait').style.display = 'none';
             if (transport.responseText != null) {
                 var result = transport.responseText.evalJSON(true);
                 var redirecturl = result.redirectUrl;

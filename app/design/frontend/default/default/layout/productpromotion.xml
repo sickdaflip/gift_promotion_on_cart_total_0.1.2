@@ -1,54 +1,51 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
-
     <productpromotion_index_index>
         <reference name="content">
             <block type="productpromotion/productpromotion" name="productpromotion"
                    template="productpromotion/productpromotion.phtml"/>
         </reference>
     </productpromotion_index_index>
-
     <productpromotion_index_options>
         <reference name="root">
             <action method="setTemplate">
                 <template>page/empty.phtml</template>
             </action>
         </reference>
-
-        <reference name="head">
-            <!--<action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
-              <type>skin_js</type>
-              <name>productpromotion/js/jquery-1.6.4.min.js</name>
-          </action>-->
-            <!--<action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
-               <type>skin_js</type>
-               <name>productpromotion/js/jquery.noconflict.js</name>
-           </action>-->
-            <action method="addJs">
-                <script>varien/product.js</script>
-            </action>
-            <action method="addJs">
-                <script>varien/configurable.js</script>
-            </action>
-            <!--action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
-                <type>skin_css</type>
-                <name>productpromotion/css/productpromotion.css</name>
-                <params/>
-            </action-->
-            <action method="addItem">
-                <type>js_css</type>
-                <name>calendar/calendar-win2k-1.css</name>
-                <params/><!--<if/><condition>can_load_calendar_js</condition>-->
-            </action>
-            <action method="addItem">
-                <type>js</type>
-                <name>calendar/calendar.js</name><!--<params/><if/><condition>can_load_calendar_js</condition>-->
-            </action>
-            <action method="addItem">
-                <type>js</type>
-                <name>calendar/calendar-setup.js</name><!--<params/><if/><condition>can_load_calendar_js</condition>-->
-            </action>
-        </reference>
+        <!--reference name="head">
+         <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+           <type>skin_js</type>
+           <name>productpromotion/js/jquery-1.6.4.min.js</name>
+        </action>
+        <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+            <type>skin_js</type>
+            <name>productpromotion/js/jquery.noconflict.js</name>
+        </action>
+         <action method="addJs">
+             <script>varien/product.js</script>
+         </action>
+         <action method="addJs">
+             <script>varien/configurable.js</script>
+         </action>
+         <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+             <type>skin_css</type>
+             <name>productpromotion/css/productpromotion.css</name>
+             <params/>
+         </action>
+         <action method="addItem">
+             <type>js_css</type>
+             <name>calendar/calendar-win2k-1.css</name>
+             <params/><if/><condition>can_load_calendar_js</condition>
+         </action>
+         <action method="addItem">
+             <type>js</type>
+             <name>calendar/calendar.js</name><params/><if/><condition>can_load_calendar_js</condition>
+         </action>
+         <action method="addItem">
+             <type>js</type>
+             <name>calendar/calendar-setup.js</name><params/><if/><condition>can_load_calendar_js</condition>
+         </action>
+     </reference-->
         <reference name="content">
             <block type="catalog/product_view" name="product.info"
                    template="productpromotion/catalog/product/options.phtml">
@@ -102,7 +99,6 @@
                         <block>product.info.addto</block>
                     </action>
                 </block>
-
                 <block type="core/template_facade" name="product.info.container1" as="container1">
                     <action method="setDataByKey">
                         <key>alias_in_layout</key>
@@ -151,109 +147,103 @@
                 </action>
             </block>
         </reference>
-
     </productpromotion_index_options>
-
-
     <biztech_productpromotion_checkout_cart_index>
         <update handle="checkout_cart_index"/>
     </biztech_productpromotion_checkout_cart_index>
-
     <checkout_cart_index>
         <reference name="head">
             <!--<action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
-                 <type>skin_js</type>
-                 <name>productpromotion/js/jquery-1.6.4.min.js</name>
-             </action>
-             <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
-                  <type>skin_js</type>
-                  <name>productpromotion/js/fancybox/jquery.fancybox-1.3.4.js</name>
-              </action>
-              <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
-                  <type>skin_js</type>
-                  <name>productpromotion/js/fancybox/jquery.easing-1.3.pack.js</name>
-              </action>
-              <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
-                  <type>skin_js</type>
-                  <name>productpromotion/js/fancybox/jquery.mousewheel-3.0.4.pack.js</name>
-              </action>
-                <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
-                  <type>skin_js</type>
-                  <name>productpromotion/js/jquery.noconflict.js</name>
-              </action>
-              <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
-                  <type>skin_css</type>
-                  <name>productpromotion/css/fancybox/jquery.fancybox-1.3.4.css</name>
-              </action>
-              <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
-                  <type>skin_js</type>
-                  <name>productpromotion/js/jquery.bxslider.min.js</name>
-                  <params/>
-              </action>
-               <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
-                  <type>skin_css</type>
-                  <name>productpromotion/css/productpromotion.css</name>
-                  <params/>
-              </action>
-              <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
-                  <type>skin_css</type>
-                  <name>productpromotion/css/jquery.bxslider.css</name>
-                  <params/>
-              </action>-->
+                <type>skin_js</type>
+                <name>productpromotion/js/jquery-1.6.4.min.js</name>
+            </action>-->
+            <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_js</type>
+                <name>productpromotion/js/fancybox/jquery.fancybox-1.3.4.js</name>
+            </action>
+            <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_js</type>
+                <name>productpromotion/js/fancybox/jquery.easing-1.3.pack.js</name>
+            </action>
+            <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_js</type>
+                <name>productpromotion/js/fancybox/jquery.mousewheel-3.0.4.pack.js</name>
+            </action>
+            <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_js</type>
+                <name>productpromotion/js/jquery.noconflict.js</name>
+            </action>
+            <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_css</type>
+                <name>productpromotion/css/fancybox/jquery.fancybox-1.3.4.css</name>
+            </action>
+            <!--<action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_js</type>
+                <name>productpromotion/js/jquery.bxslider.min.js</name>
+                <params/>
+            </action>-->
+            <!--<action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+               <type>skin_css</type>
+               <name>productpromotion/css/productpromotion.css</name>
+               <params/>
+           </action>-->
+            <!--<action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_css</type>
+                <name>productpromotion/css/jquery.bxslider.css</name>
+                <params/>
+            </action>-->
             <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
                 <type>skin_js</type>
                 <name>productpromotion/js/productpromotion.js</name>
                 <params/>
             </action>
         </reference>
-
         <reference name="content">
             <block type="productpromotion/productpromotion" after="checkout.cart.crosssell"
                    name="checkout.cart.promotion" as="promotion" template="productpromotion/productpromotion.phtml"/>
         </reference>
     </checkout_cart_index>
-
     <checkout_onepage_index>
         <reference name="head">
             <!--<action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
-                 <type>skin_js</type>
-                 <name>productpromotion/js/jquery-1.6.4.min.js</name>
-             </action>
-              <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
-                  <type>skin_js</type>
-                  <name>productpromotion/js/fancybox/jquery.fancybox-1.3.4.js</name>
-              </action>
-              <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
-                  <type>skin_js</type>
-                  <name>productpromotion/js/fancybox/jquery.easing-1.3.pack.js</name>
-              </action>
-              <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
-                  <type>skin_js</type>
-                  <name>productpromotion/js/fancybox/jquery.mousewheel-3.0.4.pack.js</name>
-              </action>
-                <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
-                  <type>skin_js</type>
-                  <name>productpromotion/js/jquery.noconflict.js</name>
-              </action>
-              <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
-                  <type>skin_css</type>
-                  <name>productpromotion/css/fancybox/jquery.fancybox-1.3.4.css</name>
-              </action>
-              <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
-                  <type>skin_js</type>
-                  <name>productpromotion/js/jquery.bxslider.min.js</name>
-                  <params/>
-              </action>
-               <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
-                  <type>skin_css</type>
-                  <name>productpromotion/css/productpromotion.css</name>
-                  <params/>
-              </action>
-              <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
-                  <type>skin_css</type>
-                  <name>productpromotion/css/jquery.bxslider.css</name>
-                  <params/>
-              </action>-->
+                <type>skin_js</type>
+                <name>productpromotion/js/jquery-1.6.4.min.js</name>
+            </action>-->
+            <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_js</type>
+                <name>productpromotion/js/fancybox/jquery.fancybox-1.3.4.js</name>
+            </action>
+            <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_js</type>
+                <name>productpromotion/js/fancybox/jquery.easing-1.3.pack.js</name>
+            </action>
+            <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_js</type>
+                <name>productpromotion/js/fancybox/jquery.mousewheel-3.0.4.pack.js</name>
+            </action>
+            <!--<action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+              <type>skin_js</type>
+              <name>productpromotion/js/jquery.noconflict.js</name>
+          </action>-->
+            <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_css</type>
+                <name>productpromotion/css/fancybox/jquery.fancybox-1.3.4.css</name>
+            </action>
+            <!--<action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_js</type>
+                <name>productpromotion/js/jquery.bxslider.min.js</name>
+                <params/>
+            </action>-->
+            <!--<action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_css</type>
+                <name>productpromotion/css/productpromotion.css</name>
+                <params/>
+            </action>-->
+            <!--<action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
+                <type>skin_css</type>
+                <name>productpromotion/css/jquery.bxslider.css</name>
+                <params/>
+            </action>-->
             <action method="addItem" ifconfig="biztech_productpromotion/promotionsettings/enabled">
                 <type>skin_js</type>
                 <name>productpromotion/js/productpromotion.js</name>
@@ -261,7 +251,6 @@
             </action>
         </reference>
     </checkout_onepage_index>
-
     <checkout_onepage_review>
         <reference name="root">
             <action method="setTemplate" ifconfig="biztech_productpromotion/promotionsettings/enabled">

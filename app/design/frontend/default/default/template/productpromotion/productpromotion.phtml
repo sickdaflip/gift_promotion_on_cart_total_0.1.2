@@ -1,4 +1,35 @@
 <?php
+
+function cleanpp($string)
+{
+
+    $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
+//$string = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
+    $string = strtolower($string);
+    $utf8 = array(
+        '/[áàâãªä]/u' => 'a',
+        '/[ÁÀÂÃÄ]/u' => 'A',
+        '/[ÍÌÎÏ]/u' => 'I',
+        '/[íìîï]/u' => 'i',
+        '/[éèêë]/u' => 'e',
+        '/[ÉÈÊË]/u' => 'E',
+        '/[óòôõºö]/u' => 'o',
+        '/[ÓÒÔÕÖ]/u' => 'O',
+        '/[úùûü]/u' => 'u',
+        '/[ÚÙÛÜ]/u' => 'U',
+        '/ç/' => 'c',
+        '/Ç/' => 'C',
+        '/ñ/' => 'n',
+        '/Ñ/' => 'N',
+        '/–/' => '-', // UTF-8 hyphen to "normal" hyphen
+        '/[’‘‹›‚]/u' => ' ', // Literally a single quote
+        '/[“”«»„]/u' => ' ', // Double quote
+        '/ /' => ' ', // nonbreaking space (equiv. to 0x160)
+    );
+
+    return preg_replace(array_keys($utf8), array_values($utf8), $string); // Replaces multiple hyphens with single one.
+}
+
 $page = Mage::getStoreConfig('biztech_productpromotion/promotionsettings/frontendsettings', Mage::app()->getStore());
 $showPromotion = Mage::getStoreConfig('biztech_productpromotion/promotionsettings/showpromotion', Mage::app()->getStore());
 $limit = Mage::getStoreConfig('biztech_productpromotion/promotionsettings/setlimit', Mage::app()->getStore());
@@ -16,9 +47,9 @@ if (($promotionAvailed != true) || ($promotionAvailed == true) && $showPromotion
         ?>
 
 
-        <div id="loadingmask" class="loading-bg" style="display: none;">
-            <div class="loading-process">
-                <?php echo $this->__('Please wait...') ?>
+        <div class="please-wait" id="productpromotion-please-wait" style="display:none;">
+            <div class="centered">
+                <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw margin-bottom"></i>
             </div>
         </div>
 
@@ -87,7 +118,6 @@ if (($promotionAvailed != true) || ($promotionAvailed == true) && $showPromotion
         if ($count > 0):
             ?>
             <div id="promotions">
-
                 <div id="promotion-title" class="page-title title-buttons">
                     <h1>
                         <?php
@@ -104,8 +134,8 @@ if (($promotionAvailed != true) || ($promotionAvailed == true) && $showPromotion
                         ?>
                     </h1>
                 </div>
-                <div class="category-products">
-                    <ul class='gift-grid'>
+                <div id="promotion-products" class="promotion-products">
+                    <ul class='products-grid'>
                         <?php
                         foreach ($product_array as $product_data) {
                             $cartPriceDifference = $this->getCartdifference($product_data['promotion_price']);
@@ -115,16 +145,12 @@ if (($promotionAvailed != true) || ($promotionAvailed == true) && $showPromotion
                                 ?>
                                 <?php
                                 if (!(in_array($productID, $availedProdcut))):
+
                                     if ($_item->getIsInStock() == 1 && $_item->getStatus() == Mage_Catalog_Model_Product_Status::STATUS_ENABLED):
                                         ?>
                                         <li class="item">
-                                            <div class="content">
-                                            <h3 class="product-name"><a href="<?php echo $_item->getProductUrl() ?>"
-                                                                        title="<?php echo $this->stripTags($_item->getName(), null, true) ?>"><?php echo $_item->getName() ?></a>
-                                            </h3>
                                             <div class="products-image float-center">
-                                                <a href="<?php echo $_item->getProductUrl() ?>"
-                                                   title="<?php echo $this->stripTags($this->getImageLabel($_item, 'small_image'), null, true) ?>"
+                                                <a title="<?php echo $this->stripTags($this->getImageLabel($_item, 'small_image'), null, true) ?>"
                                                    class="product-image small-centered">
                                                     <img
                                                             src="<?php echo $this->helper('catalog/image')->init($_item, 'small_image')->resize(200); ?>"
@@ -132,10 +158,21 @@ if (($promotionAvailed != true) || ($promotionAvailed == true) && $showPromotion
                                                             alt="<?php echo $this->stripTags($this->getImageLabel($_item, 'small_image'), null, true) ?>"/>
                                                 </a>
                                             </div>
+                                            <?php if ($_item->getAttributeText('manufacturer')): ?>
+                                                <?php $brand = $_item->getAttributeText('manufacturer') ?>
+                                                <div class="product-brand">
+                                                    <img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA); ?>catalog/brands/<?php echo cleanpp($brand) ?>.png"
+                                                         alt="<?php echo $brand ?> Logo">
+                                                </div>
+                                            <?php endif; ?>
+                                            <h3 class="product-name"><a title="<?php echo $this->stripTags($_item->getName(), null, true) ?>"><?php echo $_item->getName(); ?></a>
+                                            </h3>
+
                                             <?php if (($cartPriceDifference > 0) && ($promotionAvailed != true)): ?>
                                                 <div class="price-box">
                                                         <span class="regular-price">
-                                                            <span class="price"><?php echo $this->__('You Miss ') . Mage::helper('core')->currency($cartPriceDifference); ?></span></span>
+                                                            <span class="price"> <?php echo 'noch ' ?> <?php echo Mage::helper('core')->currency($cartPriceDifference); ?></span>
+                                                        </span>
 
                                                 </div>
                                             <?php endif; ?>
@@ -147,7 +184,8 @@ if (($promotionAvailed != true) || ($promotionAvailed == true) && $showPromotion
                                                             title="<?php echo $this->__('Choose this gift') ?>"
                                                             id="<?php echo $id_value; ?>"
                                                             onclick="selectGift('<?php echo $id_value ?>', '<?php echo Mage::helper('checkout/cart')->getAddUrl($_item) ?>', '<?php echo $product_data['promotion_id'] ?>', '<?php echo $this->getUrl('productpromotion/index/setGift/') ?>')">
-                                                            <?php echo $this->__('Choose this gift') ?>
+                                                            <span><span><?php echo $this->__('Choose this gift') ?></span>
+                                                            </span>
                                                     </button>
                                                 <?php } else { ?>
                                                     <button name="choose-gift" type="button"
@@ -156,7 +194,8 @@ if (($promotionAvailed != true) || ($promotionAvailed == true) && $showPromotion
                                                             title="<?php echo $this->__('Choose this gift') ?>"
                                                             id="<?php echo $id_value; ?>"
                                                             onclick="showOptions('<?php echo $_item->getId() . '_' . $product_data['promotion_id']; ?>')">
-                                                            <?php echo $this->__('Choose this gift') ?>
+                                                            <span><span><?php echo $this->__('Choose this gift') ?></span>
+                                                            </span>
                                                     </button>
 
                                                     <a href="<?php echo $this->getUrl('productpromotion/index/options', array('product_id' => $_item->getId(), 'promotionId' => $product_data['promotion_id'], 'page' => 'cart')); ?>"
@@ -166,9 +205,8 @@ if (($promotionAvailed != true) || ($promotionAvailed == true) && $showPromotion
                                                     </a>
                                                 <?php } ?>
                                             </div>
-                                            </div>
                                         </li>
-                                        <?php
+                                    <?php
                                     endif;
                                 endif;
                                 $availedProdcut[] = $productID;
@@ -187,3 +225,25 @@ if (($promotionAvailed != true) || ($promotionAvailed == true) && $showPromotion
     }
 }
 ?>
+
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        jQuery('.fancybox').fancybox(
+            {
+                hideOnContentClick: true,
+                width: 400,
+                autoDimensions: true,
+                type: 'iframe',
+                showTitle: false,
+                scrolling: 'no',
+                onComplete: function () {
+                    jQuery('#fancybox-frame').load(function () { // wait for frame to load and then gets it's height
+                        jQuery('#fancybox-content').height(jQuery(this).contents().find('body').height() + 70);
+                        jQuery.fancybox.resize();
+                    });
+
+                }
+            }
+        );
+    });
+</script>
